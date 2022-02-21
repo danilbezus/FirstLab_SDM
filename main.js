@@ -14,7 +14,7 @@ function noninteractive(values) {
   const d = Get_discriminant(a, b, c);
   Solve(a, b, c, d);
 }
-BAAAAAAAAD commit
+
 function interactive() {
   const a = Get_interactive_input('a = ');
   const b = Get_interactive_input('b = ');
