@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/danilbezus/FirstLab_SDM/issues"
   },
-  "homepage": "https://github.com/danilbezus/FirstLab_SDM#readme"
+  "homepage": "https://github.com/danilbezus/FirstLab_SDM#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
 }

@@ -1,20 +1,57 @@
 'use strict';
 
 const fs = require('fs');
+const readlineSync = require('readline-sync');
+const { stdin: input, stdout: output } = require('process');
 
 function noninteractive(values) {
-  const [a, b, c] = values;
+  CheckForPatterns(values);
+  const [a, b, c] = Get_noninteractive_input(values);
   if (a === 0) {
-    console.log('a is 0');
+    console.log('a cannot be 0');
     process.exit(1);
   }
   const d = Get_discriminant(a, b, c);
   Solve(a, b, c, d);
 }
 
-fs.readFile(process.argv[2], 'utf8', function (err, contents) {
-  Get_noninteractive_input(contents);
-});
+function interactive() {
+  const a = Get_interactive_input('a = ');
+  const b = Get_interactive_input('b = ');
+  const c = Get_interactive_input('c = ');
+  const d = Get_discriminant(a, b, c);
+  Solve(a, b, c, d);
+}
+
+function start() {
+  let path = process.argv[2];
+  if (path) {
+    fs.readFile(path, 'utf8', function (err, contents) {
+      noninteractive(contents);
+    });
+  } else interactive();
+}
+
+function CheckForPatterns(values) {
+  const regexp = /^-?\d+\.?\d*\s\-?\d+\.?\d*\s\-?\d+\.?\d*\s\n$/s;
+  if (!regexp.test(values)) {
+    console.log('Invalid file format');
+    process.exit(1);
+  }
+}
+
+function Get_interactive_input(text) {
+  let temp = Number(readlineSync.question(text));
+  if (isNaN(temp)) {
+    console.log(`Error. Expected a valid real number, got ${temp} instead`);
+    return Get_interactive_input(text);
+  } else if (text === 'a = ' && temp === 0) {
+    console.log('Error. a cannot be 0');
+    return Get_interactive_input(text);
+  } else {
+    return temp;
+  }
+}
 
 function Get_noninteractive_input(values) {
   const value_list = values.split(' ');
@@ -29,7 +66,7 @@ function Get_noninteractive_input(values) {
     process.exit(1);
   }
 
-  noninteractive(converted_values_list);
+  return converted_values_list;
 }
 
 function Get_discriminant(a, b, c) {
@@ -49,3 +86,5 @@ function Solve(a, b, c, d) {
     console.log(`x = ${x}`);
   } else console.log('There are 0 roots');
 }
+
+start();
